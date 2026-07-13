@@ -185,26 +185,17 @@ botoesTempo.forEach(btn => {
 });
 
 function atualizarGraficoVisualizacao() {
-    let dados, cor, label;
     const zona = ZONAS[metricaAtual];
 
-    if (metricaAtual === 'temp') {
-        dados = historicoTemp;
-        cor = '#10b981'; // Verde
-        label = 'Temperatura (°C)';
-    } else if (metricaAtual === 'umid') {
-        dados = historicoUmid;
-        cor = '#3b82f6'; // Azul
-        label = 'Umidade (%)';
-    } else if (metricaAtual === 'vpd') {
-        dados = historicoVpd;
-        cor = '#f59e0b'; // Amarelo
-        label = 'VPD (kPa)';
-    } else if (metricaAtual === 'co2') {
-        dados = historicoCo2;
-        cor = '#a855f7'; // Roxo
-        label = 'CO2 (ppm)';
-    }
+    const metricasConfig = {
+        'temp': { dados: historicoTemp, cor: '#10b981', label: 'Temperatura (°C)' },
+        'umid': { dados: historicoUmid, cor: '#3b82f6', label: 'Umidade (%)' },
+        'vpd': { dados: historicoVpd, cor: '#f59e0b', label: 'VPD (kPa)' },
+        'co2': { dados: historicoCo2, cor: '#a855f7', label: 'CO2 (ppm)' }
+    };
+
+    const config = metricasConfig[metricaAtual] || metricasConfig['temp'];
+    const { dados, cor, label } = config;
 
     // Atualiza dataset
     meuGrafico.data.datasets[0].data = dados;
