@@ -333,8 +333,7 @@ const btnExport = document.getElementById('btn-export');
 btnExport.addEventListener('click', () => {
     if (historicoHorarios.length === 0) return alert('Sem dados para exportar!');
     
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Horario,Temperatura,Umidade,VPD,CO2\n";
+    const csvRows = ["data:text/csv;charset=utf-8,Horario,Temperatura,Umidade,VPD,CO2"];
     
     for (let i = 0; i < historicoHorarios.length; i++) {
         const rawValues = [
@@ -352,9 +351,10 @@ btnExport.addEventListener('click', () => {
             }
             return '"' + strVal.replace(/"/g, '""') + '"';
         }).join(",");
-        csvContent += row + "\n";
+        csvRows.push(row);
     }
     
+    const csvContent = csvRows.join("\n") + "\n";
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
