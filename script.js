@@ -150,10 +150,11 @@ const meuGrafico = new Chart(ctx, {
 });
 
 // 3. CONTROLES DO GRÁFICO (Botões)
-document.querySelectorAll('.btn-grafico').forEach(btn => {
+const botoesGrafico = document.querySelectorAll('.btn-grafico');
+botoesGrafico.forEach(btn => {
     btn.addEventListener('click', (e) => {
         // Atualiza UI dos botões e aria-pressed
-        document.querySelectorAll('.btn-grafico').forEach(b => {
+        botoesGrafico.forEach(b => {
             b.classList.remove('ativo');
             b.setAttribute('aria-pressed', 'false');
         });
@@ -166,10 +167,11 @@ document.querySelectorAll('.btn-grafico').forEach(btn => {
     });
 });
 
-document.querySelectorAll('.btn-tempo').forEach(btn => {
+const botoesTempo = document.querySelectorAll('.btn-tempo');
+botoesTempo.forEach(btn => {
     btn.addEventListener('click', (e) => {
         // Atualiza UI dos botões e aria-pressed
-        document.querySelectorAll('.btn-tempo').forEach(b => {
+        botoesTempo.forEach(b => {
             b.classList.remove('ativo');
             b.setAttribute('aria-pressed', 'false');
         });
