@@ -20,13 +20,6 @@ let ZONAS = JSON.parse(localStorage.getItem('growbox_zonas')) || {
 let metricaAtual = 'temp'; // 'temp', 'umid', ou 'vpd'
 
 // 1. FUNÇÕES AUXILIARES
-function calcularVPD(temp, umid) {
-    if (temp == null || umid == null) return null;
-    const svp = 0.61078 * Math.exp((17.27 * temp) / (temp + 237.3));
-    const avp = svp * (umid / 100);
-    return svp - avp;
-}
-
 function avaliarStatus(valor, tipo) {
     if (valor == null) return 'default';
     const min = ZONAS[tipo].min;
@@ -65,15 +58,6 @@ function atualizarCardUI(tipo, valor, max, min) {
     } else {
         txtElement.innerText = '--';
     }
-}
-
-function obterMaxMin(array) {
-    const validos = array.filter(v => v !== null && !isNaN(v));
-    if (validos.length === 0) return { max: 0, min: 0 };
-    return {
-        max: Math.max(...validos),
-        min: Math.min(...validos)
-    };
 }
 
 // 2. INICIALIZAÇÃO DO GRÁFICO (Chart.js)
