@@ -328,13 +328,21 @@ btnExport.addEventListener('click', () => {
     csvContent += "Horario,Temperatura,Umidade,VPD,CO2\n";
     
     for (let i = 0; i < historicoHorarios.length; i++) {
-        const row = [
+        const rawValues = [
             historicoHorarios[i],
             historicoTemp[i] || '',
             historicoUmid[i] || '',
             historicoVpd[i] ? historicoVpd[i].toFixed(2) : '',
             historicoCo2[i] || ''
-        ].join(",");
+        ];
+
+        const row = rawValues.map(val => {
+            let strVal = String(val);
+            if (/^[=+\-@]/.test(strVal)) {
+                strVal = "'" + strVal;
+            }
+            return '"' + strVal.replace(/"/g, '""') + '"';
+        }).join(",");
         csvContent += row + "\n";
     }
     
