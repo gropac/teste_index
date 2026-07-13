@@ -145,9 +145,13 @@ const meuGrafico = new Chart(ctx, {
 // 3. CONTROLES DO GRÁFICO (Botões)
 document.querySelectorAll('.btn-grafico').forEach(btn => {
     btn.addEventListener('click', (e) => {
-        // Atualiza UI dos botões
-        document.querySelectorAll('.btn-grafico').forEach(b => b.classList.remove('ativo'));
+        // Atualiza UI dos botões e aria-pressed
+        document.querySelectorAll('.btn-grafico').forEach(b => {
+            b.classList.remove('ativo');
+            b.setAttribute('aria-pressed', 'false');
+        });
         e.target.classList.add('ativo');
+        e.target.setAttribute('aria-pressed', 'true');
 
         // Pega o tipo de dado selecionado
         metricaAtual = e.target.getAttribute('data-tipo');
@@ -157,9 +161,13 @@ document.querySelectorAll('.btn-grafico').forEach(btn => {
 
 document.querySelectorAll('.btn-tempo').forEach(btn => {
     btn.addEventListener('click', (e) => {
-        // Atualiza UI dos botões
-        document.querySelectorAll('.btn-tempo').forEach(b => b.classList.remove('ativo'));
+        // Atualiza UI dos botões e aria-pressed
+        document.querySelectorAll('.btn-tempo').forEach(b => {
+            b.classList.remove('ativo');
+            b.setAttribute('aria-pressed', 'false');
+        });
         e.target.classList.add('ativo');
+        e.target.setAttribute('aria-pressed', 'true');
 
         // Pega a resolução de tempo
         intervaloAtual = parseInt(e.target.getAttribute('data-res'));

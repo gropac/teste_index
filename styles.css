@@ -172,6 +172,11 @@ h1 {
     color: var(--text-main);
 }
 
+.btn-grafico:focus-visible {
+    outline: 2px solid var(--status-ideal);
+    outline-offset: 2px;
+}
+
 .btn-grafico.ativo {
     background: rgba(16, 185, 129, 0.15);
     border-color: rgba(16, 185, 129, 0.4);
@@ -195,6 +200,11 @@ h1 {
 .btn-tempo:hover {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text-main);
+}
+
+.btn-tempo:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
 }
 
 .btn-tempo.ativo {
