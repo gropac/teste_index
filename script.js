@@ -248,9 +248,11 @@ async function atualizarDashboard() {
             historicoVpd = [];
             historicoCo2 = [];
 
+            const dateFormatter = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+
             feeds.forEach(feed => {
                 const dataHora = new Date(feed.created_at);
-                historicoHorarios.push(dataHora.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }));
+                historicoHorarios.push(dateFormatter.format(dataHora));
                 
                 const t = parseFloat(feed.field1);
                 const u = parseFloat(feed.field2);
