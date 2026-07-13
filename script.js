@@ -17,7 +17,7 @@ let ZONAS = JSON.parse(localStorage.getItem('growbox_zonas')) || {
     co2:  { min: 400, max: 1500, config: { min: 300, max: 2000, step: 200 } }
 };
 
-let metricaAtual = 'temp'; // 'temp', 'umid', ou 'vpd'
+let metricaAtual = 'temp'; // 'temp', 'umid', 'vpd', ou 'co2'
 
 // 1. FUNÇÕES AUXILIARES
 function calcularVPD(temp, umid) {
