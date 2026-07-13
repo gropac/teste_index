@@ -1,0 +1,4 @@
+Original time: 642.105819 ms
+Optimized time: 99.28871800000002 ms
+Original failed on huge array: Maximum call stack size exceeded
+Optimized handled huge array

@@ -68,12 +68,19 @@ function atualizarCardUI(tipo, valor, max, min) {
 }
 
 function obterMaxMin(array) {
-    const validos = array.filter(v => v !== null && !isNaN(v));
-    if (validos.length === 0) return { max: 0, min: 0 };
-    return {
-        max: Math.max(...validos),
-        min: Math.min(...validos)
-    };
+    let max = -Infinity;
+    let min = Infinity;
+    let hasValid = false;
+    for (let i = 0; i < array.length; i++) {
+        const v = array[i];
+        if (v !== null && !isNaN(v)) {
+            hasValid = true;
+            if (v > max) max = v;
+            if (v < min) min = v;
+        }
+    }
+    if (!hasValid) return { max: 0, min: 0 };
+    return { max, min };
 }
 
 // 2. INICIALIZAÇÃO DO GRÁFICO (Chart.js)
