@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard ThingSpeak - Growbox</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <header class="cabecalho">
+            <h1>Monitoramento climatico</h1>
+            <div id="status-conexao" class="status-badge">Conectando...</div>
+        </header>
+
+        <div class="grid-valores">
+            <!-- Card Temperatura -->
+            <div class="card-valor" id="card-temp">
+                <div class="card-titulo">Temperatura</div>
+                <div class="valor-principal-container">
+                    <div id="txt-temp" class="valor-principal">--</div>
+                    <span class="unidade">°C</span>
+                </div>
+                <div class="min-max">
+                    <span id="max-temp" class="max">↑ --</span>
+                    <span id="min-temp" class="min">↓ --</span>
+                </div>
+            </div>
+
+            <!-- Card Umidade -->
+            <div class="card-valor" id="card-umid">
+                <div class="card-titulo">Umidade</div>
+                <div class="valor-principal-container">
+                    <div id="txt-umid" class="valor-principal">--</div>
+                    <span class="unidade">%</span>
+                </div>
+                <div class="min-max">
+                    <span id="max-umid" class="max">↑ --</span>
+                    <span id="min-umid" class="min">↓ --</span>
+                </div>
+            </div>
+
+            <!-- Card VPD -->
+            <div class="card-valor" id="card-vpd">
+                <div class="card-titulo">VPD (Déficit de Pressão)</div>
+                <div class="valor-principal-container">
+                    <div id="txt-vpd" class="valor-principal">--</div>
+                    <span class="unidade">kPa</span>
+                </div>
+                <div class="min-max">
+                    <span id="max-vpd" class="max">↑ --</span>
+                    <span id="min-vpd" class="min">↓ --</span>
+                </div>
+            </div>
+
+            <!-- Card CO2 -->
+            <div class="card-valor" id="card-co2">
+                <div class="card-titulo">CO2</div>
+                <div class="valor-principal-container">
+                    <div id="txt-co2" class="valor-principal">--</div>
+                    <span class="unidade">ppm</span>
+                </div>
+                <div class="min-max">
+                    <span id="max-co2" class="max">↑ --</span>
+                    <span id="min-co2" class="min">↓ --</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controles-wrapper">
+            <div class="grafico-controles metricas">
+                <button class="btn-grafico ativo" data-tipo="temp">Temperatura</button>
+                <button class="btn-grafico" data-tipo="umid">Umidade</button>
+                <button class="btn-grafico" data-tipo="vpd">VPD</button>
+                <button class="btn-grafico" data-tipo="co2">CO2</button>
+            </div>
+            <div class="grafico-controles tempo">
+                <button class="btn-tempo" data-res="72">6h</button>
+                <button class="btn-tempo" data-res="144">12h</button>
+                <button class="btn-tempo ativo" data-res="288">24h</button>
+                <button class="btn-tempo" data-res="576">48h</button>
+                <button class="btn-tempo" data-res="2016">7d</button>
+            </div>
+        </div>
+
+        <div class="grafico-wrapper">
+            <canvas id="meuGrafico"></canvas>
+        </div>
+
+        <div class="rodape">
+            <div id="ultima-att">Última atualização: --</div>
+        </div>
+    </div>
+
+    <!-- Chart.js e Plugin de Anotações -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.2.1/dist/chartjs-plugin-annotation.min.js"></script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
