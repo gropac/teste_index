@@ -255,25 +255,19 @@ async function atualizarDashboard() {
                 historicoCo2.push(isNaN(c) ? null : c);
             });
 
-            // Atualiza Card Temperatura
-            const mmTemp = obterMaxMin(historicoTemp);
-            const atualTemp = historicoTemp[historicoTemp.length - 1];
-            atualizarCardUI('temp', atualTemp, mmTemp.max, mmTemp.min);
+            // Atualiza Cards UI
+            const metricas = [
+                { id: 'temp', hist: historicoTemp },
+                { id: 'umid', hist: historicoUmid },
+                { id: 'vpd',  hist: historicoVpd },
+                { id: 'co2',  hist: historicoCo2 }
+            ];
 
-            // Atualiza Card Umidade
-            const mmUmid = obterMaxMin(historicoUmid);
-            const atualUmid = historicoUmid[historicoUmid.length - 1];
-            atualizarCardUI('umid', atualUmid, mmUmid.max, mmUmid.min);
-
-            // Atualiza Card VPD
-            const mmVpd = obterMaxMin(historicoVpd);
-            const atualVpd = historicoVpd[historicoVpd.length - 1];
-            atualizarCardUI('vpd', atualVpd, mmVpd.max, mmVpd.min);
-
-            // Atualiza Card CO2
-            const mmCo2 = obterMaxMin(historicoCo2);
-            const atualCo2 = historicoCo2[historicoCo2.length - 1];
-            atualizarCardUI('co2', atualCo2, mmCo2.max, mmCo2.min);
+            metricas.forEach(metrica => {
+                const mm = obterMaxMin(metrica.hist);
+                const atual = metrica.hist[metrica.hist.length - 1];
+                atualizarCardUI(metrica.id, atual, mm.max, mm.min);
+            });
 
             // Atualiza Labels do Gráfico e re-renderiza o dataset atual selecionado
             meuGrafico.data.labels = historicoHorarios;
