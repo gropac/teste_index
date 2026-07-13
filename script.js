@@ -20,13 +20,6 @@ let ZONAS = JSON.parse(localStorage.getItem('growbox_zonas')) || {
 let metricaAtual = 'temp'; // 'temp', 'umid', ou 'vpd'
 
 // 1. FUNÇÕES AUXILIARES
-function calcularVPD(temp, umid) {
-    if (temp == null || umid == null) return null;
-    const svp = 0.61078 * Math.exp((17.27 * temp) / (temp + 237.3));
-    const avp = svp * (umid / 100);
-    return svp - avp;
-}
-
 function avaliarStatus(valor, tipo) {
     if (valor == null) return 'default';
     const min = ZONAS[tipo].min;
