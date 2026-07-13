@@ -9,8 +9,8 @@ let historicoUmid = [];
 let historicoVpd = [];
 let historicoCo2 = [];
 
-// Definições de Zonas Ideais
-const ZONAS = {
+// Definições de Zonas Ideais (buscando do localStorage se existir)
+let ZONAS = JSON.parse(localStorage.getItem('growbox_zonas')) || {
     temp: { min: 20, max: 29, config: { min: 0, max: 50, step: 10 } },
     umid: { min: 40, max: 70, config: { min: 0, max: 100, step: 20 } },
     vpd:  { min: 0.8, max: 1.2, config: { min: 0, max: 3, step: 0.5 } },
@@ -145,9 +145,13 @@ const meuGrafico = new Chart(ctx, {
 // 3. CONTROLES DO GRÁFICO (Botões)
 document.querySelectorAll('.btn-grafico').forEach(btn => {
     btn.addEventListener('click', (e) => {
-        // Atualiza UI dos botões
-        document.querySelectorAll('.btn-grafico').forEach(b => b.classList.remove('ativo'));
+        // Atualiza UI dos botões e aria-pressed
+        document.querySelectorAll('.btn-grafico').forEach(b => {
+            b.classList.remove('ativo');
+            b.setAttribute('aria-pressed', 'false');
+        });
         e.target.classList.add('ativo');
+        e.target.setAttribute('aria-pressed', 'true');
 
         // Pega o tipo de dado selecionado
         metricaAtual = e.target.getAttribute('data-tipo');
@@ -157,9 +161,13 @@ document.querySelectorAll('.btn-grafico').forEach(btn => {
 
 document.querySelectorAll('.btn-tempo').forEach(btn => {
     btn.addEventListener('click', (e) => {
-        // Atualiza UI dos botões
-        document.querySelectorAll('.btn-tempo').forEach(b => b.classList.remove('ativo'));
+        // Atualiza UI dos botões e aria-pressed
+        document.querySelectorAll('.btn-tempo').forEach(b => {
+            b.classList.remove('ativo');
+            b.setAttribute('aria-pressed', 'false');
+        });
         e.target.classList.add('ativo');
+        e.target.setAttribute('aria-pressed', 'true');
 
         // Pega a resolução de tempo
         intervaloAtual = parseInt(e.target.getAttribute('data-res'));
@@ -214,6 +222,9 @@ function atualizarGraficoVisualizacao() {
 async function atualizarDashboard() {
     let url = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?results=${intervaloAtual}`;
     if (READ_API_KEY !== '') url += `&api_key=${READ_API_KEY}`;
+
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if(loadingOverlay) loadingOverlay.classList.add('ativo');
 
     try {
         const response = await fetch(url);
@@ -276,6 +287,8 @@ async function atualizarDashboard() {
             const badge = document.getElementById('status-conexao');
             badge.innerText = 'Online';
             badge.className = 'status-badge';
+            
+            if(loadingOverlay) loadingOverlay.classList.remove('ativo');
 
         }
     } catch (error) {
@@ -283,9 +296,84 @@ async function atualizarDashboard() {
         const badge = document.getElementById('status-conexao');
         badge.innerText = 'Offline';
         badge.className = 'status-badge erro';
+        if(loadingOverlay) loadingOverlay.classList.remove('ativo');
     }
 }
 
 // Inicia
 atualizarDashboard();
 setInterval(atualizarDashboard, 15000);
+
+// ==========================================
+// 5. NOVAS FUNCIONALIDADES (UI/UX)
+// ==========================================
+
+// --- TEMA CLARO/ESCURO ---
+const btnTheme = document.getElementById('btn-theme');
+const temaSalvo = localStorage.getItem('growbox_theme');
+if (temaSalvo === 'light') document.body.classList.add('light-theme');
+
+btnTheme.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    const isLight = document.body.classList.contains('light-theme');
+    localStorage.setItem('growbox_theme', isLight ? 'light' : 'dark');
+});
+
+// --- EXPORTAR CSV ---
+const btnExport = document.getElementById('btn-export');
+btnExport.addEventListener('click', () => {
+    if (historicoHorarios.length === 0) return alert('Sem dados para exportar!');
+    
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Horario,Temperatura,Umidade,VPD,CO2\n";
+    
+    for (let i = 0; i < historicoHorarios.length; i++) {
+        const row = [
+            historicoHorarios[i],
+            historicoTemp[i] || '',
+            historicoUmid[i] || '',
+            historicoVpd[i] ? historicoVpd[i].toFixed(2) : '',
+            historicoCo2[i] || ''
+        ].join(",");
+        csvContent += row + "\n";
+    }
+    
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `growbox_dados_${new Date().getTime()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+
+// --- MODAL DE CONFIGURAÇÕES ---
+const btnSettings = document.getElementById('btn-settings');
+const modal = document.getElementById('modal-settings');
+const btnCancel = document.getElementById('btn-modal-cancel');
+const btnSave = document.getElementById('btn-modal-save');
+
+btnSettings.addEventListener('click', () => {
+    // Preenche inputs com dados atuais
+    document.getElementById('input-vpd-min').value = ZONAS.vpd.min;
+    document.getElementById('input-vpd-max').value = ZONAS.vpd.max;
+    document.getElementById('input-co2-min').value = ZONAS.co2.min;
+    document.getElementById('input-co2-max').value = ZONAS.co2.max;
+    modal.style.display = 'flex';
+});
+
+btnCancel.addEventListener('click', () => modal.style.display = 'none');
+
+btnSave.addEventListener('click', () => {
+    ZONAS.vpd.min = parseFloat(document.getElementById('input-vpd-min').value);
+    ZONAS.vpd.max = parseFloat(document.getElementById('input-vpd-max').value);
+    ZONAS.co2.min = parseFloat(document.getElementById('input-co2-min').value);
+    ZONAS.co2.max = parseFloat(document.getElementById('input-co2-max').value);
+    
+    localStorage.setItem('growbox_zonas', JSON.stringify(ZONAS));
+    modal.style.display = 'none';
+    
+    // Atualiza imediatamente a visualização
+    atualizarGraficoVisualizacao();
+    atualizarDashboard();
+});

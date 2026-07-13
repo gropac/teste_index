@@ -17,8 +17,13 @@
 
     <div class="dashboard-container">
         <header class="cabecalho">
-            <h1>Monitoramento climatico</h1>
-            <div id="status-conexao" class="status-badge">Conectando...</div>
+            <h1>Monitoramento Growbox</h1>
+            <div class="header-acoes">
+                <button id="btn-theme" class="btn-icone" title="Alternar Tema">🌓</button>
+                <button id="btn-export" class="btn-icone" title="Exportar Dados (CSV)">📥</button>
+                <button id="btn-settings" class="btn-icone" title="Configurações">⚙️</button>
+                <div id="status-conexao" class="status-badge" aria-live="polite">Conectando...</div>
+            </div>
         </header>
 
         <div class="grid-valores">
@@ -50,8 +55,11 @@
 
             <!-- Card VPD -->
             <div class="card-valor" id="card-vpd">
-                <div class="card-titulo">VPD (Déficit de Pressão)</div>
-                <div class="valor-principal-container">
+                <div class="card-titulo">
+                    VPD (Déficit de Pressão) 
+                    <span class="tooltip-icon" title="Indica o potencial de transpiração da planta. Clones (0.4-0.8), Vegetativo (0.8-1.2), Floração (1.2-1.5).">ℹ️</span>
+                </div>
+                <div class="valor-principal-container" aria-live="polite">
                     <div id="txt-vpd" class="valor-principal">--</div>
                     <span class="unidade">kPa</span>
                 </div>
@@ -77,26 +85,58 @@
 
         <div class="controles-wrapper">
             <div class="grafico-controles metricas">
-                <button class="btn-grafico ativo" data-tipo="temp">Temperatura</button>
-                <button class="btn-grafico" data-tipo="umid">Umidade</button>
-                <button class="btn-grafico" data-tipo="vpd">VPD</button>
-                <button class="btn-grafico" data-tipo="co2">CO2</button>
+                <button class="btn-grafico ativo" data-tipo="temp" aria-pressed="true">Temperatura</button>
+                <button class="btn-grafico" data-tipo="umid" aria-pressed="false">Umidade</button>
+                <button class="btn-grafico" data-tipo="vpd" aria-pressed="false">VPD</button>
+                <button class="btn-grafico" data-tipo="co2" aria-pressed="false">CO2</button>
             </div>
             <div class="grafico-controles tempo">
-                <button class="btn-tempo" data-res="72">6h</button>
-                <button class="btn-tempo" data-res="144">12h</button>
-                <button class="btn-tempo ativo" data-res="288">24h</button>
-                <button class="btn-tempo" data-res="576">48h</button>
-                <button class="btn-tempo" data-res="2016">7d</button>
+                <button class="btn-tempo" data-res="72" aria-pressed="false">6h</button>
+                <button class="btn-tempo" data-res="144" aria-pressed="false">12h</button>
+                <button class="btn-tempo ativo" data-res="288" aria-pressed="true">24h</button>
+                <button class="btn-tempo" data-res="576" aria-pressed="false">48h</button>
+                <button class="btn-tempo" data-res="2016" aria-pressed="false">7d</button>
             </div>
         </div>
 
         <div class="grafico-wrapper">
+            <div id="loading-overlay" class="loading-overlay">
+                <div class="spinner"></div>
+            </div>
             <canvas id="meuGrafico"></canvas>
         </div>
 
         <div class="rodape">
             <div id="ultima-att">Última atualização: --</div>
+        </div>
+    </div>
+
+    <!-- Modal de Configurações -->
+    <div id="modal-settings" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <h2>Configurar Zonas Ideais</h2>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label>VPD Mínimo (kPa):</label>
+                    <input type="number" id="input-vpd-min" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>VPD Máximo (kPa):</label>
+                    <input type="number" id="input-vpd-max" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>CO2 Mínimo (ppm):</label>
+                    <input type="number" id="input-co2-min" step="10">
+                </div>
+                <div class="form-group">
+                    <label>CO2 Máximo (ppm):</label>
+                    <input type="number" id="input-co2-max" step="10">
+                </div>
+            </div>
+            <div class="modal-acoes">
+                <button id="btn-modal-cancel" class="btn-grafico">Cancelar</button>
+                <button id="btn-modal-save" class="btn-grafico ativo">Salvar Alterações</button>
+            </div>
         </div>
     </div>
 
