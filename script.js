@@ -145,6 +145,23 @@ botoesGrafico.forEach(btn => {
     });
 });
 
+const botoesEstagio = document.querySelectorAll('.btn-estagio');
+botoesEstagio.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        botoesEstagio.forEach(b => b.classList.remove('ativo'));
+        e.target.classList.add('ativo');
+
+        const min = parseFloat(e.target.getAttribute('data-min'));
+        const max = parseFloat(e.target.getAttribute('data-max'));
+        
+        ZONAS.vpd.min = min;
+        ZONAS.vpd.max = max;
+        localStorage.setItem('growbox_zonas', JSON.stringify(ZONAS));
+
+        atualizarGraficoVisualizacao(); // Apenas redesenha as zonas
+    });
+});
+
 const botoesTempo = document.querySelectorAll('.btn-tempo');
 botoesTempo.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -191,6 +208,11 @@ function atualizarGraficoVisualizacao() {
     meuGrafico.options.scales.y.max = zona.config.max;
     meuGrafico.options.plugins.annotation.annotations.zonaIdeal.yMin = zona.min;
     meuGrafico.options.plugins.annotation.annotations.zonaIdeal.yMax = zona.max;
+
+    const controlesVpd = document.getElementById('controles-vpd');
+    if (controlesVpd) {
+        controlesVpd.style.display = (metricaAtual === 'vpd') ? 'flex' : 'none';
+    }
 
     meuGrafico.update();
 }

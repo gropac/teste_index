@@ -153,7 +153,7 @@ h1 {
     flex-wrap: wrap;
 }
 
-.btn-grafico {
+.btn-grafico, .btn-estagio {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     color: var(--text-muted);
@@ -167,20 +167,28 @@ h1 {
     backdrop-filter: blur(8px);
 }
 
-.btn-grafico:hover {
+.btn-grafico:hover, .btn-estagio:hover {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text-main);
 }
 
-.btn-grafico:focus-visible {
+.btn-grafico:focus-visible, .btn-estagio:focus-visible {
     outline: 2px solid var(--status-ideal);
     outline-offset: 2px;
 }
 
-.btn-grafico.ativo {
+.btn-grafico.ativo, .btn-estagio.ativo {
     background: rgba(16, 185, 129, 0.15);
     border-color: rgba(16, 185, 129, 0.4);
     color: var(--status-ideal);
+}
+
+@keyframes fadeInEstagios {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.controles-wrapper#controles-vpd {
+    animation: fadeInEstagios 0.3s ease forwards;
 }
 
 .btn-tempo {
